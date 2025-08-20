@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Meus Top Artistas do Spotify</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Meu Perfil</h1>
+  <div id="profile"></div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    async function fetchTopArtists() {
+      const res = await fetch(`/top-artists?token=${token}`);
+      const data = await res.json();
+      document.getElementById('profile').innerHTML = `
+        <h2>Top Artistas</h2>
+        ${data.items.map(artist => `
+          <div class="card">
+            <img src="${artist.images?.[0]?.url || ''}" alt="Artista" />
+            <div>
+              <strong>${artist.name}</strong><br>
+              <span>${artist.genres.join(', ')}</span>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+    if (token) fetchTopArtists();
+  </script>
+</body>
+</html>

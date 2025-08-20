@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Meu Perfil Spotify</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Meu Perfil</h1>
+  <div id="profile"></div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    async function fetchProfile() {
+      const res = await fetch(`/me?token=${token}`);
+      const data = await res.json();
+      document.getElementById('profile').innerHTML = `
+        <div class="card">
+          <img src="${data.images?.[0]?.url || ''}" alt="Avatar" />
+          <div>
+            <strong>${data.display_name}</strong><br>
+            <span>${data.email}</span>
+          </div>
+        </div>
+      `;
+    }
+    if (token) fetchProfile();
+  </script>
+</body>
+</html>
